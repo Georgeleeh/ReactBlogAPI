@@ -74,24 +74,16 @@ def get_allblogposts():
 
     return jsonify({'blogposts' : [b.dict for b in all_blogposts]}), 200
 
-@main.route('/blogpost/<blogpost_id>', methods=['GET'])
+@main.route('/blogpost/<blogpost_id>', methods=['GET', 'DELETE'])
 def get_blogpost(blogpost_id):
-
     blogpost = Blogpost.query.filter_by(id=blogpost_id).first()
-    
-    if blogpost is not None:
-        return jsonify({'blogpost' : blogpost.dict}), 200
-    else:
+
+    if blogpost is None:
         return {'error' : 'Blogpost not found'}, 404
 
-@main.route('/blogpost/<blogpost_id>/delete', methods=['DELETE'])
-def delete_blogpost(blogpost_id):
-
-    blogpost = Blogpost.query.filter_by(id=blogpost_id).first()
-    
-    if blogpost is not None:
+    if request.method == 'GET':
+        return jsonify({'blogpost' : blogpost.dict}), 200
+    elif request.method == 'DELETE':
         db.session.delete(blogpost)
         db.session.commit()
         return {'success' : 'Blogpost deleted'}, 200
-    else:
-        return {'error' : 'Blogpost not found'}, 404
