@@ -8,7 +8,7 @@ tag_blogpost = db.Table('tag_blogpost',
 )
 
 class Tag(db.Model):
-    id = db.Column(db.Integer, default=shortuuid.uuid(), primary_key=True)
+    id = db.Column(db.String(22), primary_key=True)
     name = db.Column(db.String(20),nullable=False)
 
     @property
@@ -20,7 +20,7 @@ class Tag(db.Model):
 
 class Blogpost(db.Model):
     # Primary Key
-    id = db.Column(db.String(22), default=shortuuid.uuid(), primary_key=True)
+    id = db.Column(db.String(22), primary_key=True)
 
     # Columns
     title = db.Column(db.String(70), unique=False, nullable=False)
@@ -45,5 +45,5 @@ class Blogpost(db.Model):
             'content' : self.content,
             'cover_image' : self.cover_image,
             'featured' : self.featured,
-            'tags' : [t.id for t in self.tags]
+            'tags' : [t.name for t in self.tags]
         }
