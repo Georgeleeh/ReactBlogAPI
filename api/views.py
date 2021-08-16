@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from shortuuid import ShortUUID
 import sqlalchemy
 
 from . import db
@@ -12,15 +13,34 @@ main = Blueprint('main',  __name__)
 def add_blogpost():
     blogpost_data = request.get_json()
 
+    tags = []
+
+    # Get tags for new blogpost
+    for tag_name in blogpost_data['tags']:
+        # Check if Tag exists
+        tag = Tag.query.filter_by(name=tag_name).first()
+    
+        if tag is None:
+            new_tag = Tag(
+                id = ShortUUID().random(length=22),
+                name = tag_name
+            )
+
+            db.session.add(new_tag)
+            tags.append(new_tag)
+        else:
+            tags.append(tag)
+
     new_blogpost = Blogpost(
-        id = blogpost_data['id'],
+        id = blogpost_data.get('id') or ShortUUID().random(length=22),
         title = blogpost_data['title'],
         one_liner = blogpost_data['one_liner'],
         posted = blogpost_data['posted'],
         revised = None,
         content = blogpost_data['content'],
         cover_image = blogpost_data['cover_image'],
-        featured = blogpost_data['featured']
+        featured = blogpost_data['featured'],
+        tags = tags
     )
 
     db.session.add(new_blogpost)
