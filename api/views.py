@@ -87,3 +87,10 @@ def get_blogpost(blogpost_id):
         db.session.delete(blogpost)
         db.session.commit()
         return {'success' : 'Blogpost deleted'}, 200
+
+@main.route('/tag', methods=['GET'])
+def get_all_tags():
+    
+    all_tags = Tag.query.all()
+
+    return jsonify({'tags' : [t.dict for t in all_tags]}), 200
