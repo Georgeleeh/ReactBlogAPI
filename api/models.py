@@ -30,6 +30,7 @@ class Blogpost(db.Model):
     content = db.Column(db.String, unique=False, nullable=False)
     cover_image = db.Column(db.String(100), unique=False, nullable=False)
     featured = db.Column(db.Boolean, unique=False, nullable=False, default=False)
+    portfolio = db.Column(db.Boolean, unique=False, nullable=False, default=False)
 
     # Relationships
     tags=db.relationship('Tag', secondary=tag_blogpost, backref=db.backref('blogposts_associated', lazy="dynamic"))

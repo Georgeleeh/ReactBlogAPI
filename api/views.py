@@ -45,6 +45,7 @@ def get_all_blogposts():
             content = blogpost_data['content'],
             cover_image = blogpost_data['cover_image'],
             featured = blogpost_data['featured'],
+            portfolio = blogpost_data.get('portfolio') or False,
             tags = tags
         )
 
@@ -82,6 +83,12 @@ def get_blogpost(blogpost_id):
             return {'error' : 'Blogpost not found'}, 404
 
         return jsonify({'blogpost' : blogpost.dict}), 200
+
+@main.route('/blogpost/portfolio', methods=['GET'])
+def get_portfolio_blogposts():
+    if request.method == 'GET':
+        all_blogposts = Blogpost.query.filter_by(portfolio=True).all()
+        return jsonify({'blogposts' : [b.dict for b in all_blogposts]}), 200
 
 
 # ----------------------   TAG    ---------------------- #
