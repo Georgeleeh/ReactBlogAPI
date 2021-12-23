@@ -68,14 +68,12 @@ new_blogpost = {
 
 # Add new blogpost
 print('Add new blogpost\n')
-test(base_url+'/blogpost/add', 'post', 201, json=new_blogpost) # Correct request
-test(base_url+'/blogpost/add', 'get', 404) # Wrong method
+test(base_url+'/blogpost', 'post', 201, json=new_blogpost) # Correct request
 print()
 
 # Get the blogpost we just made
 print('Get the blogpost we just made\n')
 test(base_url+f'/blogpost/{new_blogpost_id}', 'get', 200) # Correct request
-test(base_url+f'/blogpost/00', 'get', 404) # No such post exists
 print()
 
 # Get all blogposts
@@ -87,14 +85,14 @@ print()
 
 # Change the title of the blogpost we just made
 print('Change the title of the blogpost we just made\n')
-content = test(base_url+f'/blogpost/{new_blogpost_id}/edit', 'patch', 200, json={'title' : 'Revised Title'}) # Correct request
-test(base_url+f'/blogpost/{new_blogpost_id}/edit', 'patch', 500, json={'rando' : 'diddly'}) # No such column exists
+content = test(base_url+f'/blogpost/{new_blogpost_id}', 'patch', 200, json={'title' : 'Revised Title'}) # Correct request
+test(base_url+f'/blogpost/{new_blogpost_id}', 'patch', 500, json={'rando' : 'diddly'}) # No such column exists
 print(content['blogpost'])
 print()
 
 # Delete the blogpost we just made
 print('Delete the blogpost we just made\n')
-test(base_url+f'/blogpost/{new_blogpost_id}/delete', 'delete', 200) # Correct request
+test(base_url+f'/blogpost/{new_blogpost_id}', 'delete', 200) # Correct request
 test(base_url+f'/blogpost/{new_blogpost_id}', 'get', 404) # Checking it deleted
 print()
 
